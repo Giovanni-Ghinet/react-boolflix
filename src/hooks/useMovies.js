@@ -46,6 +46,7 @@ const useSearchMovies = () => {
 
         const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&language=it-IT`;
 
+        console.log(url)
         // chiamata fetch
 
         fetch(url, options)

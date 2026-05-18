@@ -9,7 +9,7 @@ function Header() {
         <header>
             <nav className="navbar navbar-expand-lg bg-body-tertiary border-bottom">
                 <div className="container">
-                    <NavLink className="navbar-brand fw-semibold" to="/">MyApp</NavLink>
+                    <NavLink className="navbar-brand fw-semibold" to="/">Boolflix</NavLink>
                     <button
                         className="navbar-toggler"
                         type="button"
@@ -22,9 +22,6 @@ function Header() {
                         <ul className="navbar-nav ms-auto align-items-center">
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/">Home</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/about">About</NavLink>
                             </li>
                             <li className="nav-item ms-lg-3">
                                 <SearchMovie />
