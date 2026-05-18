@@ -42,16 +42,11 @@ const useSearchMovies = () => {
         setLoading(true);
         setError(null);
 
-        //encoder per eliminare gli spazi o simboli che creano conflitto nel url
-
         const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&language=it-IT`;
-
-        console.log(url)
-        // chiamata fetch
 
         fetch(url, options)
             .then(response => {
-
+                if (!response.ok) throw new Error(`Errore HTTP ${response.status}`);
                 return response.json();
             })
             .then(data => {

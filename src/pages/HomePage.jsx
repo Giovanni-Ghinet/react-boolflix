@@ -19,7 +19,14 @@ function HomePage() {
             <ul className="list-group">
               {results.map(movie => (
                 <li key={movie.id} className="list-group-item">
-                  <strong>{movie.title}</strong> ({movie.release_date?.slice(0, 4) || 'N/D'})
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h5 className="mb-1">{movie.title}</h5>
+                      <p className="mb-1 text-muted small">Titolo Originale: {movie.original_title}</p>
+                      <p className="mb-0 text-muted small">Lingua: {movie.original_language}</p>
+                    </div>
+                    <span className="badge bg-primary rounded-pill">Voto: {movie.vote_average.toFixed(1)}</span>
+                  </div>
                 </li>
               ))}
             </ul>
