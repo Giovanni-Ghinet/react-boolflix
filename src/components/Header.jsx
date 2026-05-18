@@ -1,5 +1,6 @@
 import { NavLink } from "react-router";
 import useTheme from "../hooks/useTheme";
+import SearchMovie from "./SearchMovie";
 
 function Header() {
     const { theme, toggleTheme } = useTheme();
@@ -24,6 +25,9 @@ function Header() {
                             </li>
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/about">About</NavLink>
+                            </li>
+                            <li className="nav-item ms-lg-3">
+                                <SearchMovie />
                             </li>
                             <li className="nav-item ms-2">
                                 <button
