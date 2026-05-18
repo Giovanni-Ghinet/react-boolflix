@@ -10,3 +10,12 @@
   componenti. Per stili specifici di un singolo componente è preferibile
   usare un CSS Module (es. `NomeComponente.module.css`).
 */
+
+/* Classi per le bandiere e le lingue */
+.flag-icon {
+    width: 20px;
+}
+
+.lang-badge-text {
+    font-size: 0.7rem;
+}

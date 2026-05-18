@@ -3,6 +3,27 @@ import { useSearch } from "../contexts/MoviesContext";
 function HomePage() {
   const { results, loading, error, query } = useSearch();
 
+  // Mappatura dei codici lingua TMDB (ISO 639-1) ai codici nazione (ISO 3166-1 alpha-2)
+  const getFlag = (lang) => {
+    const langMap = {
+      en: 'GB',
+      it: 'IT',
+      fr: 'FR',
+      es: 'ES',
+      de: 'DE',
+      ja: 'JP',
+      ko: 'KR'
+    };
+
+    const countryCode = langMap[lang.toLowerCase()];
+
+    return countryCode ? (
+      <img src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${countryCode}.svg`} alt={lang} className="ms-2 shadow-sm flag-icon" />
+    ) : (
+      <span className="ms-2 text-uppercase badge bg-secondary lang-badge-text">{lang}</span>
+    );
+  };
+
   return (
     <div className="container py-4">
       <h1>Benvenuto su Boolflix</h1>
@@ -23,9 +44,12 @@ function HomePage() {
                     <div>
                       <h5 className="mb-1">{movie.title}</h5>
                       <p className="mb-1 text-muted small">Titolo Originale: {movie.original_title}</p>
-                      <p className="mb-0 text-muted small">Lingua: {movie.original_language}</p>
+                      <p className="mb-0 text-muted small">Lingua: {getFlag(movie.original_language)}</p>
                     </div>
-                    <span className="badge bg-primary rounded-pill">Voto: {movie.vote_average.toFixed(1)}</span>
+                    <span className="badge bg-primary rounded-pill d-flex align-items-center">
+                      <i className="bi bi-star-fill text-warning me-2"></i>
+                      {movie.vote_average.toFixed(1)}
+                    </span>
                   </div>
                 </li>
               ))}
