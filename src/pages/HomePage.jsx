@@ -60,45 +60,52 @@ function HomePage() {
 
   return (
     <div className="container py-4">
-      <h1>Benvenuto su Boolflix</h1>
+      <h1>Originale Boolflix</h1>
 
       {loading && <p>Caricamento in corso...</p>}
       {error && <p className="text-danger">Errore: {error}</p>}
 
       {query && !loading && (
         <section className="mt-4">
-          <h2>Risultati della ricerca per: "{query}"</h2>
+          <h5>Risultati della ricerca per: "{query}" e consigliati per te:</h5>
+          <hr className="border-secondary" />
           {results.length === 0 ? (
-            <p>Nessun risultato trovato per questa ricerca.</p>
+            <p className="text-muted">Nessun risultato trovato per questa ricerca.</p>
           ) : (
-            <ul className="list-group">
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
               {results.map(item => (
-                <li key={`${item.type}-${item.id}`} className="list-group-item d-flex gap-3">
-                  <img 
-                    src={item.poster_path ? `${IMG_BASE_URL}${item.poster_path}` : 'https://placehold.co/342x513?text=No+Poster'} 
-                    alt={item.title} 
-                    className="poster-img shadow-sm"
-                  />
-                  <div className="flex-grow-1">
-                    <div className="d-flex justify-content-between align-items-start">
-                      <div>
-                        <h5 className="mb-1">
-                          {item.title}
-                          <span className="badge bg-secondary ms-2 lang-badge-text text-uppercase">
-                            {item.type === 'movie' ? 'Film' : 'Serie TV'}
-                          </span>
-                        </h5>
-                        <p className="mb-1 text-muted small">Titolo Originale: {item.original_title}</p>
-                        <p className="mb-1 text-muted small">Lingua: {getFlag(item.original_language)}</p>
-                        <div className="mt-2">
-                          {renderStars(item.vote_average)}
-                        </div>
+                <div key={`${item.type}-${item.id}`} className="col">
+                  <div className="movie-card shadow rounded overflow-hidden">
+                    <img 
+                      src={item.poster_path ? `${IMG_BASE_URL}${item.poster_path}` : 'https://placehold.co/342x513?text=No+Poster'} 
+                      alt={item.title} 
+                      className="poster-bg"
+                    />
+                    <div className="movie-card-overlay">
+                      <h6 className="fw-bold mb-1">{item.title}</h6>
+                      <p className=" text-light opacity-75 mb-1 text-small">
+                        {item.original_title}
+                      </p>
+                      
+                      <div className="d-flex align-items-center mb-2">
+                        {getFlag(item.original_language)}
+                        <span className="badge bg-danger ms-auto badge-type">
+                          {item.type === 'movie' ? 'FILM' : 'SERIE'}
+                        </span>
                       </div>
+
+                      <div className="mb-2 stars-container">
+                        {renderStars(item.vote_average)}
+                      </div>
+
+                      <p className="small text-secondary overview-text mt-2 movie-overview">
+                        {item.overview || 'Trama non disponibile.'}
+                      </p>
                     </div>
                   </div>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </section>
       )}
