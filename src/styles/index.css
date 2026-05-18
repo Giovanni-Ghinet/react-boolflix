@@ -19,3 +19,10 @@
 .lang-badge-text {
     font-size: 0.7rem;
 }
+
+.poster-img {
+    width: 150px;
+    height: 225px;
+    object-fit: cover;
+    border-radius: 4px;
+}
