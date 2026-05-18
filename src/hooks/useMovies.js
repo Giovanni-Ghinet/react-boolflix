@@ -42,15 +42,34 @@ const useSearchMovies = () => {
         setLoading(true);
         setError(null);
 
-        const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&language=it-IT`;
+        const movieUrl = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&language=it-IT`;
+        const tvUrl = `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(query)}&language=it-IT`;
 
-        fetch(url, options)
-            .then(response => {
-                if (!response.ok) throw new Error(`Errore HTTP ${response.status}`);
-                return response.json();
+        // Promise.all per unire le 2 chiamate
+
+        Promise.all([
+            fetch(movieUrl, options).then(res => {
+                if (!res.ok) throw new Error(`Errore Film: ${res.status}`);
+                return res.json();
+            }),
+            fetch(tvUrl, options).then(res => {
+                if (!res.ok) throw new Error(`Errore Serie TV: ${res.status}`);
+                return res.json();
             })
-            .then(data => {
-                setResults(data.results || []);
+        ])
+            .then(([movieData, tvData]) => {
+                const movies = (movieData.results || []).map(m => ({ ...m, type: 'movie' }));
+
+                // tv e movies hanno il titolo e titolo originale diversi con la map 
+                // li ho strasformati come movies per poterli chiamare allo stesso modo
+                
+                const tvShows = (tvData.results || []).map(tv => ({
+                    ...tv,
+                    title: tv.name, 
+                    original_title: tv.original_name, 
+                    type: 'tv'
+                }));
+                setResults([...movies, ...tvShows]);
             })
             .catch(err => {
                 setError(err.message);
