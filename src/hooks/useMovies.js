@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 
-const { searchMovies, searchTvShows, API_KEY } = api;
+const { searchMovies, searchTvShows, getPopularMovies, getPopularTvShows, API_KEY } = api;
 
 const useSearchMovies = () => {
     const [query, setQuery] = useState('');
     const [searchType, setSearchType] = useState('all'); // 'all' | 'movie' | 'tv'
     const [results, setResults] = useState([]);
+    const [popularMovies, setPopularMovies] = useState([]);
+    const [popularTv, setPopularTv] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -17,6 +19,16 @@ const useSearchMovies = () => {
         setSearchType(type);
         setQuery(searchText);
     };
+
+    // Caricamento contenuti popolari all'avvio
+    useEffect(() => {
+        Promise.all([getPopularMovies(), getPopularTvShows()])
+            .then(([movies, tv]) => {
+                setPopularMovies(movies);
+                setPopularTv(tv);
+            })
+            .catch(err => console.error("Errore nel caricamento dei popolari:", err));
+    }, []);
 
     // usata la use effect per fare la fetch solo quando cerco un film al submit
 
@@ -51,7 +63,7 @@ const useSearchMovies = () => {
             });
     }, [query, searchType]);
 
-    return { results, loading, error, triggerSearch, query, searchType };
+    return { results, popularMovies, popularTv, loading, error, triggerSearch, query, searchType };
 };
 
 export default useSearchMovies;

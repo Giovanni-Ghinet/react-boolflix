@@ -1,7 +1,8 @@
 import { useSearch } from "../contexts/MoviesContext";
+import { Link } from "react-router-dom";
 
 function HomePage() {
-  const { results, loading, error, query } = useSearch();
+  const { results, popularMovies, popularTv, loading, error, query } = useSearch();
 
   const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w342';
 
@@ -68,6 +69,46 @@ function HomePage() {
     return text.slice(0, maxLength) + ' ...';
   };
 
+  
+  const renderGrid = (items) => (
+    <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+      {items.map(item => (
+        <div key={`${item.type}-${item.id}`} className="col">
+          <Link to={`/movie/${item.type}/${item.id}`} className="text-decoration-none text-white">
+            <div className="movie-card shadow rounded overflow-hidden">
+              <img 
+                src={item.poster_path ? `${IMG_BASE_URL}${item.poster_path}` : 'https://placehold.co/342x513?text=No+Poster'} 
+                alt={item.title} 
+                className="poster-bg"
+              />
+              <div className="movie-card-overlay">
+                <h6 className="fw-bold mb-1">{item.title}</h6>
+                <p className=" text-light opacity-75 mb-1 text-small">
+                  {item.original_title}
+                </p>
+                
+                <div className="d-flex align-items-center mb-2">
+                  {getFlag(item.original_language)}
+                  <span className="badge bg-danger ms-auto badge-type">
+                    {item.type === 'movie' ? 'FILM' : 'SERIE'}
+                  </span>
+                </div>
+
+                <div className="mb-2 stars-container">
+                  {renderStars(item.vote_average)}
+                </div>
+
+                <p className="small text-secondary overview-text mt-2 movie-overview">
+                  {truncateText(item.overview)}
+                </p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className="container py-4">
       <h1>Originale Boolflix</h1>
@@ -82,41 +123,17 @@ function HomePage() {
           {results.length === 0 ? (
             <p className="text-muted">Nessun risultato trovato per questa ricerca.</p>
           ) : (
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-              {results.map(item => (
-                <div key={`${item.type}-${item.id}`} className="col">
-                  <div className="movie-card shadow rounded overflow-hidden">
-                    <img 
-                      src={item.poster_path ? `${IMG_BASE_URL}${item.poster_path}` : 'https://placehold.co/342x513?text=No+Poster'} 
-                      alt={item.title} 
-                      className="poster-bg"
-                    />
-                    <div className="movie-card-overlay">
-                      <h6 className="fw-bold mb-1">{item.title}</h6>
-                      <p className=" text-light opacity-75 mb-1 text-small">
-                        {item.original_title}
-                      </p>
-                      
-                      <div className="d-flex align-items-center mb-2">
-                        {getFlag(item.original_language)}
-                        <span className="badge bg-danger ms-auto badge-type">
-                          {item.type === 'movie' ? 'FILM' : 'SERIE'}
-                        </span>
-                      </div>
-
-                      <div className="mb-2 stars-container">
-                        {renderStars(item.vote_average)}
-                      </div>
-
-                      <p className="small text-secondary overview-text mt-2 movie-overview">
-                        {truncateText(item.overview)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            renderGrid(results)
           )}
+        </section>
+      )}
+
+      {!query && !loading && (
+        <section className="mt-4">
+          <h5 className="mb-3">Film più popolari</h5>
+          {renderGrid(popularMovies)}
+          <h5 className="mb-3 mt-5">Serie TV più popolari</h5>
+          {renderGrid(popularTv)}
         </section>
       )}
     </div>

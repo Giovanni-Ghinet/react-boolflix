@@ -5,11 +5,6 @@ const ThemeContext = createContext(null);
 function ThemeProvider({ children }) {
     const [theme, setTheme] = useState('light'); // 'light' | 'dark'
 
-    // Modificare document.documentElement è un effetto collaterale: agisce sul DOM
-    // reale al di fuori del controllo di React. Il rendering deve essere puro
-    // (nessuna interazione col mondo esterno), quindi questa operazione va dentro
-    // useEffect, che viene eseguito dopo che React ha già aggiornato il DOM.
-    // L'array [theme] garantisce che l'effetto si ripeta solo quando il tema cambia.
     useEffect(() => {
         document.documentElement.setAttribute('data-bs-theme', theme);
     }, [theme]);
@@ -19,14 +14,14 @@ function ThemeProvider({ children }) {
     };
 
     const value = {
-        theme,       // stato corrente del tema
-        toggleTheme, // funzione per cambiarlo
+        theme,
+        toggleTheme,
     };
 
     return (
-        <ThemeContext value={value}>
+        <ThemeContext.Provider value={value}>
             {children}
-        </ThemeContext>
+        </ThemeContext.Provider>
     );
 }
 

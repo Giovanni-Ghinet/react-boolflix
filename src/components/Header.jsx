@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
 import SearchMovie from "./SearchMovie";
 
