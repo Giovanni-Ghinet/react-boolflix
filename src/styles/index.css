@@ -73,12 +73,6 @@
     font-size: 0.8rem;
 }
 
-/* se la trama è troppo lunga ho usato webkit per ridurre il testo a 8 righe */
-
 .movie-overview {
     font-size: 0.8rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 8;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }

@@ -60,6 +60,14 @@ function HomePage() {
     );
   };
 
+  // Funzione per troncare il testo e aggiungere i puntini di sospensione
+  const truncateText = (text, maxLength = 300) => {
+    if (!text) return 'Trama non disponibile.';
+    if (text.length <= maxLength) 
+      return text;
+    return text.slice(0, maxLength) + ' ...';
+  };
+
   return (
     <div className="container py-4">
       <h1>Originale Boolflix</h1>
@@ -101,7 +109,7 @@ function HomePage() {
                       </div>
 
                       <p className="small text-secondary overview-text mt-2 movie-overview">
-                        {item.overview || 'Trama non disponibile.'}
+                        {truncateText(item.overview)}
                       </p>
                     </div>
                   </div>
