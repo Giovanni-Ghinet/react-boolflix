@@ -76,3 +76,7 @@
 .movie-overview {
     font-size: 0.8rem;
 }
+
+.search-filter-select {
+    max-width: 100px;
+}

@@ -5,14 +5,16 @@ const { searchMovies, searchTvShows, API_KEY } = api;
 
 const useSearchMovies = () => {
     const [query, setQuery] = useState('');
+    const [searchType, setSearchType] = useState('all'); // 'all' | 'movie' | 'tv'
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const triggerSearch = (searchText) => {
+    const triggerSearch = (searchText, type = 'all') => {
         if (!searchText.trim()) return;
         
         setError(null);
+        setSearchType(type);
         setQuery(searchText);
     };
 
@@ -30,12 +32,15 @@ const useSearchMovies = () => {
         setLoading(true);
         setError(null);
         
-        Promise.all([
-            searchMovies(query),
-            searchTvShows(query)
-        ])
-            .then(([movies, tvShows]) => {
-                setResults([...movies, ...tvShows]);
+        const promises = [];
+        
+        if (searchType === 'all' || searchType === 'movie') promises.push(searchMovies(query));
+        if (searchType === 'all' || searchType === 'tv') promises.push(searchTvShows(query));
+
+        Promise.all(promises)
+            .then((responses) => {
+                // Appiattisce l'array di array (film + serie) in un unico array
+                setResults(responses.flat());
             })
             .catch(err => {
                 setError(err.message);
@@ -44,9 +49,9 @@ const useSearchMovies = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, [query]);
+    }, [query, searchType]);
 
-    return { results, loading, error, triggerSearch, query };
+    return { results, loading, error, triggerSearch, query, searchType };
 };
 
 export default useSearchMovies;
