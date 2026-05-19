@@ -38,6 +38,8 @@ function HomePage() {
   // lingue più utilizzate
 
   const getFlag = (lang) => {
+    if (!lang) return null;
+
     const langMap = {
       en: 'GB',
       it: 'IT',
